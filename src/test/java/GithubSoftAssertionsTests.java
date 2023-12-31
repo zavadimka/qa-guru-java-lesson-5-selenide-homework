@@ -1,4 +1,3 @@
-import com.codeborne.selenide.CollectionCondition;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.*;
@@ -21,9 +20,19 @@ public class GithubSoftAssertionsTests extends TestBase {
         // открыть страницу SoftAssertions
         $(byText("Soft assertions")).click();
 
-        // проверить, что внутри есть пример кода для JUnit5 - найти заголовок с текстом
-        $$("h4").shouldHave(CollectionCondition.itemWithText("3. Using JUnit5 extend test class:"));
-
+        // проверить, что внутри есть пример кода для JUnit5
+        $("#wiki-body")
+                .shouldHave(text("@ExtendWith({SoftAssertsExtension.class})\n" +
+                        "class Tests {\n" +
+                        "  @Test\n" +
+                        "  void test() {\n" +
+                        "    Configuration.assertionMode = SOFT;\n" +
+                        "    open(\"page.html\");\n" +
+                        "\n" +
+                        "    $(\"#first\").should(visible).click();\n" +
+                        "    $(\"#second\").should(visible).click();\n" +
+                        "  }\n" +
+                        "}"))
+                .shouldBe(visible);
     }
-
 }
